@@ -2603,6 +2603,64 @@ abstract class ChartAxisRenderer with _CustomizeAxisElements {
         fontStyle, labelSize, actualText, labelValue, trimmedText, renderText));
   }
 
+  /// To trigger the bool chart render label event
+  void _triggerBoolChartLabelRenderEvent(
+      String labelText0, String labelText1, num labelValue) {
+    AxisLabelRenderArgs axisLabelArgs;
+    TextStyle fontStyle = _axis.labelStyle;
+
+    String actualText;
+    if (labelValue == 0) {
+      actualText = labelText0;
+    } else if (labelValue == 1) {
+      actualText = labelText1;
+    } else {
+      actualText = '';
+    }
+    Size textSize = _measureText(actualText, _axis.labelStyle, 0);
+    // if (_axis.maximumLabelWidth != null || _axis.labelsExtent != null) {
+    //   if (_axis.maximumLabelWidth != null) {
+    //     assert(_axis.maximumLabelWidth >= 0,
+    //         'maximumLabelWidth must not be negative');
+    //   }
+    //   if (_axis.labelsExtent != null) {
+    //     assert(_axis.labelsExtent >= 0, 'labelsExtent must not be negative');
+    //   }
+    //   if ((_axis.maximumLabelWidth != null &&
+    //           textSize.width > _axis.maximumLabelWidth) ||
+    //       (_axis.labelsExtent != null && textSize.width > _axis.labelsExtent)) {
+    //     labelText = _trimAxisLabelsText(
+    //         labelText,
+    //         _axis.labelsExtent ?? _axis.maximumLabelWidth,
+    //         _axis.labelStyle,
+    //         this);
+    //   }
+    //   textSize = _measureText(labelText, _axis.labelStyle, 0);
+    // }
+    // final String trimmedText =
+    //     labelText.contains('...') || labelText.isEmpty ? labelText : null;
+    String renderText = actualText;
+    if (_chart.onAxisLabelRender != null) {
+      axisLabelArgs =
+          AxisLabelRenderArgs(labelValue, _name, _orientation, _axis);
+      axisLabelArgs.text = actualText;
+      axisLabelArgs.textStyle = fontStyle;
+      // axisLabelArgs.trimmedText = trimmedText;
+      _chart.onAxisLabelRender(axisLabelArgs);
+      fontStyle = axisLabelArgs.textStyle;
+      // if (actualText != axisLabelArgs.text && trimmedText == null) {
+      renderText = axisLabelArgs.text;
+      // } else if (trimmedText != axisLabelArgs.trimmedText &&
+      //     trimmedText != null) {
+      // renderText = axisLabelArgs.trimmedText;
+      // }
+    }
+    final Size labelSize =
+        _measureText(renderText, fontStyle, _axis.labelRotation);
+    _visibleLabels.add(AxisLabel(
+        fontStyle, labelSize, actualText, labelValue, actualText, renderText));
+  }
+
   /// Calculate the maximum lable's size
   void _calculateMaximumLabelSize(
       ChartAxisRenderer axisRenderer, SfCartesianChartState chartState) {

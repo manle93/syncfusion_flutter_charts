@@ -9,6 +9,10 @@ part of charts;
 /// used to customize the appearance.
 ///
 class NumericAxis extends ChartAxis {
+  String labelBool0;
+  String labelBool1;
+  bool isBoolChart;
+
   /// Creating an argument constructor of NumericAxis class.
   NumericAxis({
     String name,
@@ -53,6 +57,9 @@ class NumericAxis extends ChartAxis {
     RangeController rangeController,
     double maximumLabelWidth,
     double labelsExtent,
+    this.labelBool0,
+    this.labelBool1,
+    this.isBoolChart = false,
   })  : decimalPlaces = decimalPlaces ?? 3,
         super(
           name: name,
@@ -471,7 +478,12 @@ class NumericAxisRenderer extends ChartAxisRenderer {
                     _name == _chartState._chartAxis._primaryYAxisRenderer._name
                 ? (text + '%')
                 : text;
-        _triggerLabelRenderEvent(text, tempInterval);
+        if (!_numericAxis.isBoolChart) {
+          _triggerLabelRenderEvent(text, tempInterval);
+        } else {
+          _triggerBoolChartLabelRenderEvent(
+              _numericAxis.labelBool0, _numericAxis.labelBool1, tempInterval);
+        }
       }
     }
 
