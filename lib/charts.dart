@@ -206,7 +206,5 @@ part './src/common/utils/enum.dart';
 part './src/common/utils/helper.dart';
 
 // export test scripts
-
 // spline range area test case
-
 // customer bug
