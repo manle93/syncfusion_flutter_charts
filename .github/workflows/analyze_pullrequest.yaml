@@ -30,6 +30,7 @@ jobs:
         uses: sonarsource/sonarqube-scan-action@master
         timeout-minutes: 5
         env:
+          GITHUB_TOKEN: ${{ github.token }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
           SONAR_PROJECTKEY: manle_syncfusion_charts
