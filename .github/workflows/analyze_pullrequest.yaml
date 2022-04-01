@@ -20,6 +20,12 @@ jobs:
       - name: Retrieve entire repository history
         run: |
           git fetch --prune --unshallow
+      - name: Install Fvm
+        run: |
+          brew tap leoafarias/fvm
+          brew install fvm
+      - name: Setup Flutter
+        run: fvm install
       - name: Run an analysis of the PR
         uses: sonarsource/sonarqube-scan-action@master
         timeout-minutes: 5
